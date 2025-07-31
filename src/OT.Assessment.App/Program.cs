@@ -1,7 +1,22 @@
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using OT.Assessment.Shared.Data;
+using OT.Assessment.Shared.Repositories;
+using OT.Assessment.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
 builder.Services.AddControllers();
+
+// Configure Entity Framework
+builder.Services.AddDbContext<CasinoDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register repositories and services
+builder.Services.AddScoped<ICasinoRepository, CasinoRepository>();
+builder.Services.AddScoped<ICasinoService, CasinoService>();
+builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckl
 builder.Services.AddEndpointsApiExplorer();

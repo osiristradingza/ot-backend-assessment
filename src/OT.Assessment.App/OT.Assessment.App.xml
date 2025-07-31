@@ -4,5 +4,33 @@
         <name>OT.Assessment.App</name>
     </assembly>
     <members>
+        <member name="T:OT.Assessment.App.Controllers.PlayerController">
+            <summary>
+            Controller for handling player casino wager operations
+            </summary>
+        </member>
+        <member name="M:OT.Assessment.App.Controllers.PlayerController.CasinoWager(OT.Assessment.Shared.DTOs.CasinoWagerDto)">
+            <summary>
+            Receives player casino wager events and publishes them to RabbitMQ queue
+            </summary>
+            <param name="wager">Casino wager data</param>
+            <returns>Success response</returns>
+        </member>
+        <member name="M:OT.Assessment.App.Controllers.PlayerController.GetPlayerCasinoWagers(System.String,System.Int32,System.Int32)">
+            <summary>
+            Returns a paginated list of the latest casino wagers for a specific player
+            </summary>
+            <param name="playerId">Player account ID</param>
+            <param name="pageSize">Number of items per page (default: 10)</param>
+            <param name="page">Page number (default: 1)</param>
+            <returns>Paginated casino wagers</returns>
+        </member>
+        <member name="M:OT.Assessment.App.Controllers.PlayerController.GetTopSpenders(System.Int32)">
+            <summary>
+            Returns the top spending players based on total spending amount
+            </summary>
+            <param name="count">Number of top spenders to return (default: 10)</param>
+            <returns>List of top spending players</returns>
+        </member>
     </members>
 </doc>
