@@ -3,19 +3,12 @@
 ## Scenario
 In the dynamic world of online betting, capturing and analyzing data is paramount for business success. Every time a player initiates a spin in a casino game, it's essential to capture and store relevant data. This project aims to develop an API and service capable of receiving, storing, and retrieving player casino data.
 
-## Purpose of the Assessment
-This solution should showcase to us your experience, standards, and passion for software development. Ensure that the solution submitted will be a real world indication of what we can expect from you if you join our team. 
-
-Good luck and have fun.
-
 ## Pre-Requisites
-- **Project Boilerplate:** Download [ot-backend-assessment.zip](ot-backend-assessment.zip)
-
 - **RabbitMQ:** Setup a local RabbitMQ instance running on `localhost` with credentials `guest/guest`.
     > [Run RabbitMQ Windows Service](https://www.rabbitmq.com/docs/install-windows#installer) or
  
     > [Docker Compose Rabbit Image](docker/RabbitMQ/docker-up.bat)
-- **SQL Server:** Setup a local [SQL Server 2022 Developer Edition](https://www.microsoft.com/en-za/sql-server/sql-server-downloads) with the connection string: `"SERVER=localhost; DATABASE=OT_Assessment_DB; Integrated Security=SSPI;"`.
+- **SQL Server:** Setup a local SQL Server 2022 Developer Edition with the connection string: `"SERVER=localhost; DATABASE=OT_Assessment_DB; Integrated Security=SSPI;"`.
 
 ## Requirements Tasks
 ### 1. .NET 8 API 
@@ -128,4 +121,5 @@ Populate the Notes.md with some of your design choices and thoughts for your cod
 
 Try to remember and briefly document the decisions you made and why you made them. We may ask you in a follow-up interview.
 
-
+## Final Note
+Use this solution to showcase to us your standards, experience and passion for software development. Ensure that the solution put forward to us will be a real world indication of what we can expect from you if you join our team. Good luck and have fun.
