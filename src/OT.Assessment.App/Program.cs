@@ -18,6 +18,21 @@ builder.Services.AddScoped<ICasinoRepository, CasinoRepository>();
 builder.Services.AddScoped<ICasinoService, CasinoService>();
 builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 
+// Add health checks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<CasinoDbContext>("database");
+
+// Add CORS for development
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckl
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,11 +54,19 @@ if (app.Environment.IsDevelopment())
         opts.DocumentTitle = "OT Assessment App";
         opts.DisplayRequestDuration();
     });
+    
+    app.UseCors();
 }
+
+// Global exception handling middleware
+app.UseExceptionHandler("/api/error");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// Map health checks
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

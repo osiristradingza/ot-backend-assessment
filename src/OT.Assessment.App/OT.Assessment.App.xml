@@ -4,6 +4,27 @@
         <name>OT.Assessment.App</name>
     </assembly>
     <members>
+        <member name="T:OT.Assessment.App.Controllers.ErrorController">
+            <summary>
+            Global error handling controller
+            </summary>
+        </member>
+        <member name="M:OT.Assessment.App.Controllers.ErrorController.Error">
+            <summary>
+            Global error handler
+            </summary>
+        </member>
+        <member name="T:OT.Assessment.App.Controllers.HealthController">
+            <summary>
+            Health check controller for monitoring application status
+            </summary>
+        </member>
+        <member name="M:OT.Assessment.App.Controllers.HealthController.Get">
+            <summary>
+            Get the health status of the application
+            </summary>
+            <returns>Health status</returns>
+        </member>
         <member name="T:OT.Assessment.App.Controllers.PlayerController">
             <summary>
             Controller for handling player casino wager operations
