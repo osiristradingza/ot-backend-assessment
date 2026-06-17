@@ -11,16 +11,20 @@ Good luck and have fun.
 ## Pre-Requisites
 - **Project Boilerplate:** Download [ot-backend-assessment.zip](ot-backend-assessment.zip)
 
-- **RabbitMQ:** Setup a local RabbitMQ instance running on `localhost` with credentials `guest/guest`.
+- **Message Bus:** RabbitMQ , Kafka, Redis etc 
+
+    Please provide instructions to setup in the Notes.md eg: Setup a local RabbitMQ instance running on `localhost` with credentials `guest/guest`.
+
     > [Run RabbitMQ Windows Service](https://www.rabbitmq.com/docs/install-windows#installer) or
  
     > [Docker Compose Rabbit Image](docker/RabbitMQ/docker-up.bat)
-- **SQL Server:** Setup a local [SQL Server 2022 Developer Edition](https://www.microsoft.com/en-za/sql-server/sql-server-downloads) with the connection string: `"SERVER=localhost; DATABASE=OT_Assessment_DB; Integrated Security=SSPI;"`.
+- **SQL Server:** Setup a local [SQL Server Developer Edition](https://www.microsoft.com/en-za/sql-server/sql-server-downloads) or docker compose with the connection string: `"SERVER=localhost; DATABASE=OT_Assessment_DB; Integrated Security=SSPI;"`.
+
 
 ## Requirements Tasks
-### 1. .NET 8 API 
+### 1. .NET API
 The API (OT.Assessment.App) must at least include the following endpoints:
-- **POST** `api/player/casinowager`: Receives player casino wager events to publish to the local RabbitMQ queue.
+- **POST** `api/player/casinowager`: Receives player casino wager events to publish to the local Message Queue queue. (RabbitMQ, Kafka, Redis, etc)
     ```json
     {
       "wagerId": "aa6700eb-1a06-483e-9739-d293dc7a9383",
@@ -105,7 +109,7 @@ Test your application by running the <b>OT.Assessment.Tester</b>.
 Surprise us! Add some things to your project you think are valuable additions.
 
 ### 6. Notes
-Populate the Notes.md with some of your design choices and thoughts for your code submission. Please also share any challenges experienced or improvements and suggestions for a fully production ready version of solution.
+Populate the [Notes.md](notes.md) with some of your design choices and thoughts for your code submission. Please also share any challenges experienced or improvements and suggestions for a fully production ready version of solution.
 
 ## Scoring Criteria
 - Completion of all requirement tasks as specified above.
@@ -115,17 +119,16 @@ Populate the Notes.md with some of your design choices and thoughts for your cod
 - Readability and maintainability of the code.
 - Efficient database design.
 - Efficiently consuming all the data from the tester application as quickly as possible.
-- Bonus features and additions.
-- Proficiency and adherence to best practices for .NET 8 Projects, Background services, RabbitMQ, RESTful API's, Git, and SQL Server.
+- Bonus features or additions aswell as any further showcase of passion, innovation and quality.
+- Proficiency and adherence to best practices for .NET Projects, Background services, Message Queues, RESTful API's, Git, and SQL Server.
 
 ## FAQ
-- Can I modify the suggested solutions, projects, and classes? <b> Yes, but ensure all pre-requisites and tasks are completed as stated above.</b>
+- Can I modify the suggested solutions, projects, and classes? <b> Yes, it is encouraged but ensure all pre-requisites and tasks are completed as stated above.</b>
 - What technologies should I use? <b>Feel free to use any packages you're comfortable with in the .NET ecosystem.</b>
 - How do I test my application? <b>Run the tester application to simulate sending casino game data to your API. Ensure both GET routes return the correct data</b>
 - How is my application tested and assessed? <b>We'll generate the database from your schema script, start the API and consumer, run the tester application, and evaluate against the scoring criteria</b>
+- Can I use AI? <b>We encourage you to try complete the assessment yourself only use AI for tedious boilerplate tasks. Ensure that your solution stands out from any basic AI slop. We need to know you are competent, not the AI.</b>
 - Need clarification? <b>Compile a list of questions and send them to your OT representative for prompt assistance</b>
-- What's next after completing and testing the solution? <b>Ensure your database schema script is ready, commit your code to a public GitHub repository, share the link with your OT representative, and consider enhancements for production readiness</b>
+- What's next after completing and testing the solution? <b>Ensure your database schema script is ready,Notes file is updated. Commit your code to a public GitHub repository, share the link with your OT representative, and consider enhancements for production readiness</b>
 
 Try to remember and briefly document the decisions you made and why you made them. We may ask you in a follow-up interview.
-
-
