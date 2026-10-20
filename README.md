@@ -26,7 +26,7 @@ Good luck and have fun.
 ## Requirements Tasks
 ### 1. .NET API
 The API (OT.Assessment.App) must at least include the following endpoints:
-- **POST** `api/player/casinowager`: Receives player casino wager events and publishes them to your chosen message bus (RabbitMQ, Kafka, Redis, etc.).
+- **POST** : Receives player casino wager events and publishes them to your chosen message bus (RabbitMQ, Kafka, Redis, etc.).
     ```json
     {
       "wagerId": "aa6700eb-1a06-483e-9739-d293dc7a9383",
@@ -47,7 +47,7 @@ The API (OT.Assessment.App) must at least include the following endpoints:
       "duration": 1827254
     }
     ```
-- **GET** `api/player/{playerId}/casino?pageSize=10&page=1`: Returns a paginated list of the latest casino wagers for a specific player. The `{playerId}` route parameter is the `accountId` supplied in the wager payload.
+- **GET** : Returns a paginated list of the latest casino wagers for a specific player. The `{playerId}` route parameter is the `accountId` supplied in the wager payload.
     ```json
     {
       "data": [
@@ -73,7 +73,7 @@ The API (OT.Assessment.App) must at least include the following endpoints:
       "totalPages": 4
     }
     ```
-- **GET** `api/player/topSpenders?count=10`: Returns the top {count} players based on total spending. Highest to Lowest.
+- **GET** : Returns the top {count} players based on total spending. Highest to Lowest.
     ```json
     [
       {
