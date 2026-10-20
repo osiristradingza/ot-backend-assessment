@@ -3,17 +3,6 @@
 ## Scenario
 In the dynamic world of online betting, capturing and analyzing data is paramount for business success. Every time a player initiates a spin in a casino game, it's essential to capture and store relevant data. This project aims to develop an API and service capable of receiving, storing, and retrieving player casino data.
 
-```mermaid
-flowchart LR
-  Tester[Load tester or client] -->|POST casino wager| API[.NET API]
-  API -->|Publish wager| Bus[Message bus]
-  Bus -->|Consume wager| Consumer[.NET consumer service]
-  Consumer -->|Store wager| DB[(SQL Server)]
-  Client[Read client] -->|GET wagers or top spenders| API
-  API -->|Query wagers and totals| DB
-  API -->|Return results| Client
-```
-
 ## Purpose of the Assessment
 Your solution should showcase your experience, standards, and passion for software development. Submit work that reflects the quality we can expect from you if you join our team.
 
@@ -123,7 +112,8 @@ The tester requires the **.NET 10 SDK** and uses **Bogus** to generate casino wa
      }
    }
    ```
-   The supplied setting is `http://localhost:5000/api`. Replace it with your actual wager endpoint before running the tester. The tester posts directly to `Api:EndpointUri` as configured; it does not append `/player/casinowager` or any other route. Use an absolute `http://` or `https://` URI without a fragment (`#...`); query strings are supported if needed. For local HTTPS, ensure your development certificate is trusted (`dotnet dev-certs https --trust`).
+   The supplied setting is `http://localhost:5000/api`. Replace it with your actual wager endpoint before running the tester.
+   
 3. From the extracted assessment root directory (the folder containing `test`), run:
    ```powershell
    dotnet run --project .\test\OT.Assessment.Tester\OT.Assessment.Tester.csproj
@@ -136,7 +126,7 @@ The tester requires the **.NET 10 SDK** and uses **Bogus** to generate casino wa
 **Load-test success:** Every wager submitted by the tester must eventually be stored in the database. The queue may continue draining after the tester finishes; keep the consumer running until processing is complete. Check for failed submissions and processing errors, and reconcile the submitted wagers with the stored records to demonstrate that no wagers were lost. Both GET endpoints must remain usable during ingestion and return correct results once processing is complete. Record the test results, any failures, and the total time taken to store all wagers in your submission notes.
 
 ### 5. BONUS
-Surprise us! Add some things to your project you think are valuable additions.
+Surprise us! Add some things to your project you think are valuable additions. Or try to do something fun and memorable to help you stand out from other candidates.
 
 ### 6. Notes
 Document your design choices and reasoning in [Notes.md](ot-backend-assessment/Notes.md). Include setup instructions, challenges encountered, and suggested improvements for a production-ready solution.
@@ -160,5 +150,3 @@ Document your design choices and reasoning in [Notes.md](ot-backend-assessment/N
 - Can I use AI? <b>We encourage you to complete the assessment yourself and limit AI assistance to routine boilerplate tasks. Your submission must demonstrate your own engineering judgement. You are responsible for the correctness and quality of all submitted code and must be able to explain your implementation and design decisions in a follow-up interview.</b>
 - Need clarification? <b>Compile a list of questions and send them to your OT representative for prompt assistance</b>
 - What's next after completing and testing the solution? <b>Ensure your database schema script and submission notes are complete. Commit your code to a public GitHub repository and share the link with your OT representative. Document any further enhancements needed for production readiness.</b>
-
-Try to remember and briefly document the decisions you made and why you made them. We may ask you in a follow-up interview.
