@@ -3,7 +3,8 @@ services:
   rabbit:
      container_name: dev_rabbit
      hostname: rabbit
-     image: rabbitmq:3.12-management
+     image: rabbitmq:management
+     pull_policy: always
      environment:
         - RABBITMQ_DEFAULT_USER=guest
         - RABBITMQ_DEFAULT_PASS=guest

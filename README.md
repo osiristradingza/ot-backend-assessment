@@ -3,17 +3,30 @@
 ## Scenario
 In the dynamic world of online betting, capturing and analyzing data is paramount for business success. Every time a player initiates a spin in a casino game, it's essential to capture and store relevant data. This project aims to develop an API and service capable of receiving, storing, and retrieving player casino data.
 
+```mermaid
+flowchart LR
+  Tester[Load tester or client] -->|POST casino wager| API[.NET API]
+  API -->|Publish wager| Bus[Message bus]
+  Bus -->|Consume wager| Consumer[.NET consumer service]
+  Consumer -->|Store wager| DB[(SQL Server)]
+  Client[Read client] -->|GET wagers or top spenders| API
+  API -->|Query wagers and totals| DB
+  API -->|Return results| Client
+```
+
 ## Purpose of the Assessment
-This solution should showcase to us your experience, standards, and passion for software development. Ensure that the solution submitted will be a real world indication of what we can expect from you if you join our team. 
+Your solution should showcase your experience, standards, and passion for software development. Submit work that reflects the quality we can expect from you if you join our team.
+
+The tester is provided. You must implement the API, consumer service, and database schema, including the database creation script and setup instructions.
 
 Good luck and have fun.
 
 ## Pre-Requisites
-- **Project Boilerplate:** Download [ot-backend-assessment.zip](ot-backend-assessment.zip)
+- **Project Boilerplate:** Download and extract [ot-backend-assessment.zip](ot-backend-assessment.zip). Open the extracted `ot-backend-assessment` folder containing `src`, `test`, and the assessment README. Run the commands below from that folder.
 
-- **Message Bus:** RabbitMQ , Kafka, Redis etc 
+- **Message Bus:** RabbitMQ, Kafka, Redis, etc.
 
-    Please provide instructions to setup in the Notes.md eg: Setup a local RabbitMQ instance running on `localhost` with credentials `guest/guest`.
+    Document your message bus setup in the submission notes. For example, describe how to run a local RabbitMQ instance on `localhost` with credentials `guest/guest`.
 
     > [Run RabbitMQ Windows Service](https://www.rabbitmq.com/docs/install-windows#installer) or
  
@@ -24,7 +37,7 @@ Good luck and have fun.
 ## Requirements Tasks
 ### 1. .NET API
 The API (OT.Assessment.App) must at least include the following endpoints:
-- **POST** `api/player/casinowager`: Receives player casino wager events to publish to the local Message Queue queue. (RabbitMQ, Kafka, Redis, etc)
+- **POST** `api/player/casinowager`: Receives player casino wager events and publishes them to your chosen message bus (RabbitMQ, Kafka, Redis, etc.).
     ```json
     {
       "wagerId": "aa6700eb-1a06-483e-9739-d293dc7a9383",
@@ -45,7 +58,7 @@ The API (OT.Assessment.App) must at least include the following endpoints:
       "duration": 1827254
     }
     ```
-- **GET** `api/player/{playerId}/casino?pageSize=10&page=1`: Returns a paginated list of the latest casino wagers for a specific player.
+- **GET** `api/player/{playerId}/casino?pageSize=10&page=1`: Returns a paginated list of the latest casino wagers for a specific player. The `{playerId}` route parameter is the `accountId` supplied in the wager payload.
     ```json
     {
       "data": [
@@ -92,24 +105,41 @@ The API (OT.Assessment.App) must at least include the following endpoints:
 This service (OT.Assessment.Consumer) needs to consume messages published to the aforementioned queue and store consumed messages in the SQL database.
 
 ### 3. SQL Database
-Design tables, indexes, keys, stored procedures, etc. necessary for populating and retrieving the data as required above. Ensure that the data is stored using best practices and try minimalise duplication. Not all the data is required. Use your descretion for storing and retrieving necessary data to complete the requirements.
+Design the tables, indexes, keys, stored procedures, etc. necessary to store and retrieve the data required above. Follow database best practices and minimise unnecessary duplication. Not all payload fields need to be stored; use your discretion to retain the data needed to meet the requirements.
 
 **DatabaseGenerate.sql**: Populate the file in the root of the directory with the necessary statements to recreate the database.
 
 ### 4. Benchmark and Test
 Test your application by running the <b>OT.Assessment.Tester</b>.
 
-1. First, run API Application and the Consumer Service simultaneously.
-2. Then, run the Tester Project. 
-3. The test application should initiate communication with your api endpoints, populating the queue with relevant data. Concurrently, your consumer application should process incoming messages from the queue and store it within your database.
-4. Debug, optimise and ensure your application can handle the load by storing all the messages.
-5. Ensure the both GET endpoints return data both, during the load test and after the load test.
+The tester requires the **.NET 10 SDK** and uses **Bogus** to generate casino wager data and **NBomber** to send it to your API.
+
+1. First, run the API Application and the Consumer Service simultaneously.
+2. In the extracted assessment folder, edit [test/OT.Assessment.Tester/appsettings.json](ot-backend-assessment/test/OT.Assessment.Tester/appsettings.json) and set `Api:EndpointUri` to the full URL of your running API's casino wager POST endpoint, including its scheme, port, and route. For the required assessment route, for example:
+   ```json
+   {
+     "Api": {
+       "EndpointUri": "http://localhost:5000/api/player/casinowager"
+     }
+   }
+   ```
+   The supplied setting is `http://localhost:5000/api`. Replace it with your actual wager endpoint before running the tester. The tester posts directly to `Api:EndpointUri` as configured; it does not append `/player/casinowager` or any other route. Use an absolute `http://` or `https://` URI without a fragment (`#...`); query strings are supported if needed. For local HTTPS, ensure your development certificate is trusted (`dotnet dev-certs https --trust`).
+3. From the extracted assessment root directory (the folder containing `test`), run:
+   ```powershell
+   dotnet run --project .\test\OT.Assessment.Tester\OT.Assessment.Tester.csproj
+   ```
+   The settings file is copied to the build and publish output and read from alongside the tester executable. The tester validates `Api:EndpointUri` before starting the load test and prints the target endpoint.
+4. The tester posts Bogus-generated casino wagers to your configured API, populating the queue with relevant data. Concurrently, your consumer application should process incoming messages from the queue and store them within your database.
+5. Debug, optimise and ensure your application can handle the load by storing all the messages.
+6. Ensure both GET endpoints return data during the load test and after the load test.
+
+**Load-test success:** Every wager submitted by the tester must eventually be stored in the database. The queue may continue draining after the tester finishes; keep the consumer running until processing is complete. Check for failed submissions and processing errors, and reconcile the submitted wagers with the stored records to demonstrate that no wagers were lost. Both GET endpoints must remain usable during ingestion and return correct results once processing is complete. Record the test results, any failures, and the total time taken to store all wagers in your submission notes.
 
 ### 5. BONUS
 Surprise us! Add some things to your project you think are valuable additions.
 
 ### 6. Notes
-Populate the [Notes.md](notes.md) with some of your design choices and thoughts for your code submission. Please also share any challenges experienced or improvements and suggestions for a fully production ready version of solution.
+Document your design choices and reasoning in [Notes.md](ot-backend-assessment/Notes.md). Include setup instructions, challenges encountered, and suggested improvements for a production-ready solution.
 
 ## Scoring Criteria
 - Completion of all requirement tasks as specified above.
@@ -119,16 +149,16 @@ Populate the [Notes.md](notes.md) with some of your design choices and thoughts 
 - Readability and maintainability of the code.
 - Efficient database design.
 - Efficiently consuming all the data from the tester application as quickly as possible.
-- Bonus features or additions aswell as any further showcase of passion, innovation and quality.
-- Proficiency and adherence to best practices for .NET Projects, Background services, Message Queues, RESTful API's, Git, and SQL Server.
+- Bonus features or additions that demonstrate passion, innovation, and quality.
+- Proficiency and adherence to best practices for .NET projects, background services, message queues, RESTful APIs, Git, and SQL Server.
 
 ## FAQ
 - Can I modify the suggested solutions, projects, and classes? <b> Yes, it is encouraged but ensure all pre-requisites and tasks are completed as stated above.</b>
 - What technologies should I use? <b>Feel free to use any packages you're comfortable with in the .NET ecosystem.</b>
 - How do I test my application? <b>Run the tester application to simulate sending casino game data to your API. Ensure both GET routes return the correct data</b>
 - How is my application tested and assessed? <b>We'll generate the database from your schema script, start the API and consumer, run the tester application, and evaluate against the scoring criteria</b>
-- Can I use AI? <b>We encourage you to try complete the assessment yourself only use AI for tedious boilerplate tasks. Ensure that your solution stands out from any basic AI slop. We need to know you are competent, not the AI.</b>
+- Can I use AI? <b>We encourage you to complete the assessment yourself and limit AI assistance to routine boilerplate tasks. Your submission must demonstrate your own engineering judgement. You are responsible for the correctness and quality of all submitted code and must be able to explain your implementation and design decisions in a follow-up interview.</b>
 - Need clarification? <b>Compile a list of questions and send them to your OT representative for prompt assistance</b>
-- What's next after completing and testing the solution? <b>Ensure your database schema script is ready,Notes file is updated. Commit your code to a public GitHub repository, share the link with your OT representative, and consider enhancements for production readiness</b>
+- What's next after completing and testing the solution? <b>Ensure your database schema script and submission notes are complete. Commit your code to a public GitHub repository and share the link with your OT representative. Document any further enhancements needed for production readiness.</b>
 
 Try to remember and briefly document the decisions you made and why you made them. We may ask you in a follow-up interview.
